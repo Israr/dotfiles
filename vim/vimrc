@@ -1,0 +1,77 @@
+syntax on
+"set t_Co=16
+colorscheme desert
+set background=dark
+set ai "Auto indent
+set si "Smart indent
+set wrap "Wrap lines
+" Set to auto read when a file is changed from the outside
+filetype plugin on
+
+set autoread
+" Fast saving
+nmap <leader>w :w!<cr>
+"map g :Ag 
+
+"setup pathogen
+execute pathogen#infect()
+
+" Returns true if paste mode is enabled
+function! HasPaste()
+    if &paste
+        return 'PASTE MODE  '
+    en
+    return ''
+endfunction
+
+" enable powerline
+python from powerline.vim import setup as powerline_setup
+python powerline_setup()
+python del powerline_setup
+
+set laststatus=2
+"set statusline=\ %{HasPaste()}%F%m%r%y\ %w\ \ CWD:\ %r%{getcwd()}%h\ \ \ Line:\ %l
+set showtabline=2 " Always display the tabline, even if there is only one tab
+set noshowmode " Hide the default mode text (e.g. -- INSERT -- below the statusline). Useful with powerline
+set mouse=a
+set nu " show line numbers
+set rnu " show relative line numbers
+set cursorline
+"hi CursorLine   cterm=NONE ctermbg=darkred ctermfg=white guibg=darkred guifg=white
+set showmatch           " highlight matching [{()}]
+set wildmenu            " visual autocomplete for command menu
+" Ignore compiled files
+set wildignore=*.o,*~,*.pyc
+
+" Smart way to move between windows
+map <C-j> <C-W>j
+map <C-k> <C-W>k
+map <C-h> <C-W>h
+map <C-l> <C-W>l
+"map <C-b> :shell<CR>
+map <C-b> :!./run.sh local<CR>
+
+"line/column marker
+nnoremap <Leader>c :set cursorcolumn!<CR>
+nnoremap <Leader>r :set rnu! cursorline! <CR>
+" highlight last inserted text
+nnoremap gV `[v`]
+
+set runtimepath^=~/.vim/bundle/ag
+" Replace tabs with spaces "
+set expandtab
+" Make tab 4 space wide
+set tabstop=4
+set shiftwidth=4
+set autoindent
+set incsearch
+set hlsearch
+
+nnoremap <leader><space> :nohlsearch<CR> " turn off search highlighting
+
+command! Reload so $MYVIMRC "reload vimrc
+augroup myvimrc
+    au!
+    au BufWritePost .vimrc,_vimrc,vimrc,.gvimrc,_gvimrc,gvimrc so $MYVIMRC | if has('gui_running') | so $MYGVIMRC | endif
+augroup END
+
