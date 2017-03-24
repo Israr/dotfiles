@@ -48,8 +48,19 @@ map <C-j> <C-W>j
 map <C-k> <C-W>k
 map <C-h> <C-W>h
 map <C-l> <C-W>l
+
+
 "map <C-b> :shell<CR>
-map <C-b> :!./run.sh local<CR>
+"map <C-b> :!./run.sh local<CR>
+map <C-b> :FlowRun<CR>
+" keep search matches in middle
+map n nzzzv
+map N Nzzzv
+map ; <leader>cb
+map ' <leader>cu
+map <leader>v  :tabnew ~/.vim/vimrc<CR>
+map <leader>t  :tabnext<CR>
+map ! :shell<CR>  "open shell
 
 "line/column marker
 nnoremap <Leader>c :set cursorcolumn!<CR>
