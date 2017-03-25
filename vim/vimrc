@@ -60,6 +60,9 @@ map ; <leader>cb
 map ' <leader>cu
 map <leader>v  :tabnew ~/.vim/vimrc<CR>
 map <leader>t  :tabnext<CR>
+"map <leader>tn :tabnew<cr>
+set viminfo^=%
+
 map ! :shell<CR>  "open shell
 
 "line/column marker
@@ -84,4 +87,14 @@ augroup myvimrc
     au!
     au BufWritePost .vimrc,_vimrc,vimrc,.gvimrc,_gvimrc,gvimrc so $MYVIMRC | if has('gui_running') | so $MYGVIMRC | endif
 augroup END
+
+"jump to the last position when reopening a file
+if has("autocmd")
+   au BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g'\"" | endif
+endif
+
+
+"tricks
+"sort items
+"map <leader>st  .,/^$/-1!sort
 
