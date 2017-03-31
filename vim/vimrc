@@ -1,12 +1,25 @@
 syntax on
+set nocompatible 
 "set t_Co=16
 colorscheme desert
+"colorscheme solarized
+"colorscheme molokai
+"let g:molokai_original = 1
+"let g:rehash256 = 1
+
 set background=dark
 set ai "Auto indent
 set si "Smart indent
 set wrap "Wrap lines
 " Set to auto read when a file is changed from the outside
+filetype off                  " required
 filetype plugin on
+set rtp+=~/.vim/bundle/Vundle.vim
+call vundle#begin()
+Plugin 'VundleVim/Vundle.vim'
+Plugin 'Valloric/YouCompleteMe'
+Bundle 'jistr/vim-nerdtree-tabs'
+call vundle#end()            " required
 
 set autoread
 " Fast saving
@@ -56,14 +69,28 @@ map <C-b> :FlowRun<CR>
 " keep search matches in middle
 map n nzzzv
 map N Nzzzv
-map ; <leader>cb
-map ' <leader>cu
+"comment/uncomment : NERDComment
+map ' <leader>cb
+map " <leader>cu
+"Easy motion key mappings
+map  <Leader><Leader>w <Plug>(easymotion-bd-w)
+nmap <Leader><Leader>w <Plug>(easymotion-overwin-w)
+map  <Leader><Leader>f <Plug>(easymotion-bd-f)
+nmap <Leader><Leader>f <Plug>(easymotion-overwin-f)
+
+map <leader>nt  :NERDTreeTabsToggle<CR>
 map <leader>v  :tabnew ~/.vim/vimrc<CR>
-map <leader>t  :tabnext<CR>
+"map <leader>t  :tabnext<CR>
 "map <leader>tn :tabnew<cr>
+"for tab navigation. You may also use gt to navigate tabs
+map <C-t><up> :tabr<cr>
+map <C-t><down> :tabl<cr>
+map <C-t><left> :tabp<cr>
+map <C-t><right> :tabn<cr>
+
 set viminfo^=%
 
-map ! :shell<CR>  "open shell
+map ! :shell<CR>  
 
 "line/column marker
 nnoremap <Leader>c :set cursorcolumn!<CR>
@@ -80,8 +107,10 @@ set shiftwidth=4
 set autoindent
 set incsearch
 set hlsearch
-nnoremap <leader><space> :nohlsearch<CR> " turn off search highlighting
-
+" turn off highlighted search 
+nnoremap <leader><space> :nohlsearch<CR> 
+vmap "  :s/\%V\(.*\)\%V/"\1"/<CR>
+vmap '  :s/\%V\(.*\)\%V/'\1'/<CR>
 command! Reload so $MYVIMRC "reload vimrc
 augroup myvimrc
     au!
