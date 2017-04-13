@@ -1,16 +1,29 @@
 syntax on
 set nocompatible 
 "set t_Co=16
+set t_Co=256
 colorscheme desert
+"colorscheme molokai
 "colorscheme solarized
 "colorscheme molokai
 "let g:molokai_original = 1
 "let g:rehash256 = 1
-
+" provide tab completion for files under current directory 
+set path=**
 set background=dark
 set ai "Auto indent
 set si "Smart indent
 set wrap "Wrap lines
+"set autochdir
+set runtimepath^=~/.vim/bundle/ag
+" Replace tabs with spaces "
+set expandtab
+" Make tab 4 space wide
+set tabstop=4
+set shiftwidth=4
+set autoindent
+set incsearch
+set hlsearch
 " Set to auto read when a file is changed from the outside
 filetype off                  " required
 filetype plugin on
@@ -18,6 +31,13 @@ set rtp+=~/.vim/bundle/Vundle.vim
 call vundle#begin()
 Plugin 'VundleVim/Vundle.vim'
 Plugin 'Valloric/YouCompleteMe'
+Plugin 'jlanzarotta/bufexplorer'
+Plugin 'majutsushi/tagbar'
+Plugin 'Shougo/unite.vim'
+Plugin 'Shougo/vimfiler.vim'
+"Plugin 'Shougo/vimproc.vim'
+"Plugin 'Shougo/vimshell.vim'
+"https://github.com/Shougo/deoplete.nvim
 Bundle 'jistr/vim-nerdtree-tabs'
 call vundle#end()            " required
 
@@ -36,6 +56,17 @@ function! HasPaste()
     en
     return ''
 endfunction
+
+"Move cursor to middle of the line
+function! s:Gm()
+  execute 'normal! ^'
+  let first_col = virtcol('.')
+  execute 'normal! g_'
+  let last_col  = virtcol('.')
+  execute 'normal! ' . (first_col + last_col) / 2 . '|'
+endfunction
+nnoremap <silent> gm :call <SID>Gm()<CR>
+onoremap <silent> gm :call <SID>Gm()<CR>
 
 " enable powerline
 python from powerline.vim import setup as powerline_setup
@@ -61,7 +92,11 @@ map <C-j> <C-W>j
 map <C-k> <C-W>k
 map <C-h> <C-W>h
 map <C-l> <C-W>l
-
+"vim filer
+map <F3> :VimFiler -explorer -force-hide<CR>
+"fast window switching
+map <F6> :bnext<CR>
+map <F4> :bd<CR>
 
 "map <C-b> :shell<CR>
 "map <C-b> :!./run.sh local<CR>
@@ -70,16 +105,18 @@ map <C-b> :FlowRun<CR>
 map n nzzzv
 map N Nzzzv
 "comment/uncomment : NERDComment
-map ' <leader>cb
-map " <leader>cu
+"map ' <leader>cb
+"map " <leader>cu
+map  <Leader><Leader>t :TagbarToggle<CR>
 "Easy motion key mappings
-map  <Leader><Leader>w <Plug>(easymotion-bd-w)
+"map  <Leader><Leader>w <Plug>(easymotion-bd-w)
 nmap <Leader><Leader>w <Plug>(easymotion-overwin-w)
-map  <Leader><Leader>f <Plug>(easymotion-bd-f)
+"map  <Leader><Leader>f <Plug>(easymotion-bd-f)
 nmap <Leader><Leader>f <Plug>(easymotion-overwin-f)
 
 map <leader>nt  :NERDTreeTabsToggle<CR>
 map <leader>v  :tabnew ~/.vim/vimrc<CR>
+map <leader><leader>r  :tabnew ~/roku/roku.sh<CR>
 "map <leader>t  :tabnext<CR>
 "map <leader>tn :tabnew<cr>
 "for tab navigation. You may also use gt to navigate tabs
@@ -98,32 +135,31 @@ nnoremap <Leader>r :set rnu! cursorline! <CR>
 " highlight last inserted text
 nnoremap gV `[v`]
 
-set runtimepath^=~/.vim/bundle/ag
-" Replace tabs with spaces "
-set expandtab
-" Make tab 4 space wide
-set tabstop=4
-set shiftwidth=4
-set autoindent
-set incsearch
-set hlsearch
 " turn off highlighted search 
 nnoremap <leader><space> :nohlsearch<CR> 
 vmap "  :s/\%V\(.*\)\%V/"\1"/<CR>
 vmap '  :s/\%V\(.*\)\%V/'\1'/<CR>
 command! Reload so $MYVIMRC "reload vimrc
+command! MakeTags !ctags -R .
 augroup myvimrc
     au!
     au BufWritePost .vimrc,_vimrc,vimrc,.gvimrc,_gvimrc,gvimrc so $MYVIMRC | if has('gui_running') | so $MYGVIMRC | endif
 augroup END
+au BufRead,BufNewFile *.brs setfiletype basic
 
 "jump to the last position when reopening a file
 if has("autocmd")
    au BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g'\"" | endif
 endif
+augroup MyAutoCmd
+  autocmd!
+augroup END
 
+autocmd MyAutoCmd ColorScheme *  highlight TabLineFill guifg=skyblue gui=NONE ctermfg=117 cterm=NONE
+autocmd MyAutoCmd ColorScheme *  highlight TabLineSel  guifg=lightgoldenrod2 gui=bold ctermfg=186 cterm=bold
+autocmd MyAutoCmd ColorScheme *  highlight TabLineFill guifg=skyblue gui=NONE ctermfg=117 cterm=NONE
 
 "tricks
 "sort items
 "map <leader>st  .,/^$/-1!sort
-
+" %s/\s/+$//e
