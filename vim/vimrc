@@ -28,18 +28,27 @@ set hlsearch
 filetype off                  " required
 filetype plugin on
 set rtp+=~/.vim/bundle/Vundle.vim
+" add angular brackets to match pairs (% toggles between matchpair)
+set matchpairs+=<:>
 call vundle#begin()
 Plugin 'VundleVim/Vundle.vim'
 Plugin 'Valloric/YouCompleteMe'
-Plugin 'jlanzarotta/bufexplorer'
+"commandT provides bufexplorer functionality
+"Plugin 'jlanzarotta/bufexplorer'
 Plugin 'majutsushi/tagbar'
 Plugin 'Shougo/unite.vim'
 Plugin 'Shougo/vimfiler.vim'
+Plugin 'christoomey/vim-tmux-navigator'
+Plugin 'Yggdroot/indentLine'
+"Plugin 'iangmiao/auto-pairs'
 "Plugin 'Shougo/vimproc.vim'
 "Plugin 'Shougo/vimshell.vim'
 "https://github.com/Shougo/deoplete.nvim
 Bundle 'jistr/vim-nerdtree-tabs'
 call vundle#end()            " required
+
+let g:indentLine_color_term = 239
+"let g:indentLine_char = 'c'
 
 set autoread
 " Fast saving
@@ -65,13 +74,67 @@ function! s:Gm()
   let last_col  = virtcol('.')
   execute 'normal! ' . (first_col + last_col) / 2 . '|'
 endfunction
+
 nnoremap <silent> gm :call <SID>Gm()<CR>
 onoremap <silent> gm :call <SID>Gm()<CR>
+
+
+function! FindInc()
+  let oldPath=&path
+  set path=$PWD/**
+
+  exe ":find " t:newIncSw
+
+"Will do this just in time when needed
+"  let t:newIncSw=expand('%:p')
+
+  let &path=oldPath
+endfun
+
+function! CIncSw()
+  " Switch from *.c* to *.h* and vice versa
+
+  if exists("t:oldIncSw") && expand("%:t:r") == fnamemodify(t:oldIncSw, ":t:r")
+    let t:newIncSw=t:oldIncSw
+    let t:oldIncSw=expand("%:p")
+    exe "e " t:newIncSw
+    return 0
+  endif
+
+  if match(expand("%"), '\.c') > 0
+    let t:newIncSw=substitute(expand("%:t"), '\.c\(.*\)', '.h', "")
+  elseif match(expand("%"), "\\.h") > 0
+    let t:newIncSw=substitute(expand("%:t"), '\.h\(.*\)', '.cpp', "")
+  endif
+
+  call FindInc()
+endfun
 
 " enable powerline
 python from powerline.vim import setup as powerline_setup
 python powerline_setup()
 python del powerline_setup
+  
+function! ShowSpaces(...)  
+  let @/='\v(\s+$)|( +\ze\t)'
+  let oldhlsearch=&hlsearch
+  if !a:0
+    let &hlsearch=!&hlsearch
+  else
+    let &hlsearch=a:1
+  end
+  return oldhlsearch
+endfunction
+
+function! StripTrailingWhitespace()
+  if !&binary && &filetype != 'diff'
+    normal mz
+    normal Hmy
+    %s/\s\+$//e
+    normal 'yz<CR>
+    normal `z
+  endif
+endfunction
 
 set laststatus=2
 "set statusline=\ %{HasPaste()}%F%m%r%y\ %w\ \ CWD:\ %r%{getcwd()}%h\ \ \ Line:\ %l
@@ -93,11 +156,15 @@ map <C-k> <C-W>k
 map <C-h> <C-W>h
 map <C-l> <C-W>l
 "vim filer
-map <F3> :VimFiler -explorer -force-hide<CR>
+"map <F3> :VimFiler -explorer -force-hide<CR>
+map <leader>nt  :NERDTreeTabsToggle<CR>
+map <F3>  :NERDTreeTabsToggle<CR>
 "fast window switching
+map <F5> :call CIncSw()<CR>
 map <F6> :bnext<CR>
 map <F4> :bd<CR>
-
+nmap <F8> o<Esc>
+"nmap <CR><CR> o<ESC>
 "map <C-b> :shell<CR>
 "map <C-b> :!./run.sh local<CR>
 map <C-b> :FlowRun<CR>
@@ -114,8 +181,7 @@ nmap <Leader><Leader>w <Plug>(easymotion-overwin-w)
 "map  <Leader><Leader>f <Plug>(easymotion-bd-f)
 nmap <Leader><Leader>f <Plug>(easymotion-overwin-f)
 
-map <leader>nt  :NERDTreeTabsToggle<CR>
-map <leader>v  :tabnew ~/.vim/vimrc<CR>
+map <leader><leader>v  :tabnew ~/.vim/vimrc<CR>
 map <leader><leader>r  :tabnew ~/roku/roku.sh<CR>
 "map <leader>t  :tabnext<CR>
 "map <leader>tn :tabnew<cr>
@@ -124,7 +190,6 @@ map <C-t><up> :tabr<cr>
 map <C-t><down> :tabl<cr>
 map <C-t><left> :tabp<cr>
 map <C-t><right> :tabn<cr>
-
 set viminfo^=%
 
 map ! :shell<CR>  
@@ -158,6 +223,10 @@ augroup END
 autocmd MyAutoCmd ColorScheme *  highlight TabLineFill guifg=skyblue gui=NONE ctermfg=117 cterm=NONE
 autocmd MyAutoCmd ColorScheme *  highlight TabLineSel  guifg=lightgoldenrod2 gui=bold ctermfg=186 cterm=bold
 autocmd MyAutoCmd ColorScheme *  highlight TabLineFill guifg=skyblue gui=NONE ctermfg=117 cterm=NONE
+
+source ~/.vim/vimrc_work
+source ~/.vim/vimrc_utils
+"source ~/.vim/plugins/perforce.vim
 
 "tricks
 "sort items
