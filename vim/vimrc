@@ -38,8 +38,11 @@ Plugin 'Valloric/YouCompleteMe'
 Plugin 'majutsushi/tagbar'
 Plugin 'Shougo/unite.vim'
 Plugin 'Shougo/vimfiler.vim'
+Plugin 'sheerun/vim-polyglot'
 Plugin 'christoomey/vim-tmux-navigator'
 Plugin 'Yggdroot/indentLine'
+"import or drop (Vimport Vimdrop) python packages
+Plugin 'prakashdanish/vimport'
 "Plugin 'iangmiao/auto-pairs'
 "Plugin 'Shougo/vimproc.vim'
 "Plugin 'Shougo/vimshell.vim'
@@ -164,6 +167,7 @@ map <F5> :call CIncSw()<CR>
 map <F6> :bnext<CR>
 map <F4> :bd<CR>
 nmap <F8> o<Esc>
+nmap <F12> :terminal<CR>
 "nmap <CR><CR> o<ESC>
 "map <C-b> :shell<CR>
 "map <C-b> :!./run.sh local<CR>
