@@ -32,15 +32,28 @@ set rtp+=~/.vim/bundle/Vundle.vim
 set matchpairs+=<:>
 call vundle#begin()
 Plugin 'VundleVim/Vundle.vim'
-Plugin 'Valloric/YouCompleteMe'
+"Plugin 'Valloric/YouCompleteMe'
 "commandT provides bufexplorer functionality
 "Plugin 'jlanzarotta/bufexplorer'
 Plugin 'majutsushi/tagbar'
-Plugin 'Shougo/unite.vim'
+" Plugin 'Shougo/unite.vim'
+
+"For searching using Ack command
+Plugin 'mileszs/ack.vim'
+
+Plugin 'junegunn/fzf.vim'
+
+" for commenting
+Plugin 'scrooloose/nerdcommenter'
+
+"Plugin 'Shougo/denite.nvim'
+"Plugin 'roxma/nvim-yarp'
+"Plugin 'roxma/vim-hug-neovim-rpc'
 Plugin 'Shougo/vimfiler.vim'
 Plugin 'sheerun/vim-polyglot'
 Plugin 'christoomey/vim-tmux-navigator'
 Plugin 'Yggdroot/indentLine'
+Plugin 'easymotion/vim-easymotion'
 "import or drop (Vimport Vimdrop) python packages
 Plugin 'prakashdanish/vimport'
 "Plugin 'iangmiao/auto-pairs'
@@ -48,6 +61,8 @@ Plugin 'prakashdanish/vimport'
 "Plugin 'Shougo/vimshell.vim'
 "https://github.com/Shougo/deoplete.nvim
 Bundle 'jistr/vim-nerdtree-tabs'
+Bundle 'dbeniamine/cheat.sh-vim'
+
 call vundle#end()            " required
 
 let g:indentLine_color_term = 239
@@ -78,6 +93,9 @@ function! s:Gm()
   execute 'normal! ' . (first_col + last_col) / 2 . '|'
 endfunction
 
+
+" map semi-colon to colon
+nnoremap ; :
 nnoremap <silent> gm :call <SID>Gm()<CR>
 onoremap <silent> gm :call <SID>Gm()<CR>
 
@@ -138,6 +156,25 @@ function! StripTrailingWhitespace()
     normal `z
   endif
 endfunction
+
+
+" Define mappings
+autocmd FileType denite call s:denite_my_settings()
+function! s:denite_my_settings() abort
+  nnoremap <silent><buffer><expr> <CR>
+  \ denite#do_map('do_action')
+  nnoremap <silent><buffer><expr> d
+  \ denite#do_map('do_action', 'delete')
+  nnoremap <silent><buffer><expr> p
+  \ denite#do_map('do_action', 'preview')
+  nnoremap <silent><buffer><expr> q
+  \ denite#do_map('quit')
+  nnoremap <silent><buffer><expr> i
+  \ denite#do_map('open_filter_buffer')
+  nnoremap <silent><buffer><expr> <Space>
+  \ denite#do_map('toggle_select').'j'
+endfunction
+
 
 set laststatus=2
 "set statusline=\ %{HasPaste()}%F%m%r%y\ %w\ \ CWD:\ %r%{getcwd()}%h\ \ \ Line:\ %l
