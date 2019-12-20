@@ -2,6 +2,7 @@ syntax on
 set nocompatible 
 "set t_Co=16
 set t_Co=256
+"set mousemodel=extend
 colorscheme desert
 "colorscheme molokai
 "colorscheme solarized
@@ -32,15 +33,16 @@ set rtp+=~/.vim/bundle/Vundle.vim
 set matchpairs+=<:>
 call vundle#begin()
 Plugin 'VundleVim/Vundle.vim'
+Plugin 'liuchengxu/vim-which-key'
 "Plugin 'Valloric/YouCompleteMe'
 "commandT provides bufexplorer functionality
 "Plugin 'jlanzarotta/bufexplorer'
 Plugin 'majutsushi/tagbar'
-" Plugin 'Shougo/unite.vim'
+Plugin 'Shougo/unite.vim'
 
 "For searching using Ack command
 Plugin 'mileszs/ack.vim'
-
+Plugin 'junegunn/fzf'
 Plugin 'junegunn/fzf.vim'
 
 " for commenting
@@ -60,10 +62,29 @@ Plugin 'prakashdanish/vimport'
 "Plugin 'Shougo/vimproc.vim'
 "Plugin 'Shougo/vimshell.vim'
 "https://github.com/Shougo/deoplete.nvim
+
+if has('nvim')
+  Plugin 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
+  let g:deoplete#enable_at_startup = 1
+  inoremap <silent> <Leader><Tab> <C-r>=MyLeaderTabfunc()<CR>
+  Plugin 'deoplete-plugins/deoplete-jedi'
+else
+" requires python3
+  "Plugin 'Shougo/deoplete.nvim'
+  "Plugin 'roxma/nvim-yarp'
+  "Plugin 'roxma/vim-hug-neovim-rpc'
+endif
+
+if has('nvim')
+"Plugin 'python-mode/python-mode'
+end
 Bundle 'jistr/vim-nerdtree-tabs'
 Bundle 'dbeniamine/cheat.sh-vim'
-
 call vundle#end()            " required
+
+if executable('ag')
+  let g:ackprg = 'ag --vimgrep'
+endif
 
 let g:indentLine_color_term = 239
 "let g:indentLine_char = 'c'
@@ -93,11 +114,17 @@ function! s:Gm()
   execute 'normal! ' . (first_col + last_col) / 2 . '|'
 endfunction
 
-
-" map semi-colon to colon
-nnoremap ; :
 nnoremap <silent> gm :call <SID>Gm()<CR>
 onoremap <silent> gm :call <SID>Gm()<CR>
+
+"accelerated motions with alt+hjkl
+noremap <M-l> 4l
+noremap <M-h> 4h
+noremap <M-j> 4j
+noremap <M-k> 4k
+
+" map semi-colon to colon
+nnoremap <silent> <leader> :WhichKey '\'<CR>
 
 
 function! FindInc()
@@ -131,11 +158,16 @@ function! CIncSw()
   call FindInc()
 endfun
 
-" enable powerline
+
+" enable powerline (doesnt work for nvim)
+if has('nvim')
+    "echo "no powerline"
+else
 python from powerline.vim import setup as powerline_setup
 python powerline_setup()
 python del powerline_setup
-  
+end
+
 function! ShowSpaces(...)  
   let @/='\v(\s+$)|( +\ze\t)'
   let oldhlsearch=&hlsearch
@@ -199,6 +231,10 @@ map <C-l> <C-W>l
 "map <F3> :VimFiler -explorer -force-hide<CR>
 map <leader>nt  :NERDTreeTabsToggle<CR>
 map <F3>  :NERDTreeTabsToggle<CR>
+map <leader>o  :VimFiler<CR>
+map <leader>b  :Buffers<CR>
+map <leader>t  :Tags<CR>
+"map <leader>f  :Files<CR>
 "fast window switching
 map <F5> :call CIncSw()<CR>
 map <F6> :bnext<CR>
@@ -222,8 +258,8 @@ nmap <Leader><Leader>w <Plug>(easymotion-overwin-w)
 "map  <Leader><Leader>f <Plug>(easymotion-bd-f)
 nmap <Leader><Leader>f <Plug>(easymotion-overwin-f)
 
-map <leader><leader>v  :tabnew ~/.vim/vimrc<CR>
-map <leader><leader>r  :tabnew ~/roku/roku.sh<CR>
+map <leader><leader>v  :e ~/.vim/vimrc<CR>
+map <leader><leader>h  :History<CR>
 "map <leader>t  :tabnext<CR>
 "map <leader>tn :tabnew<cr>
 "for tab navigation. You may also use gt to navigate tabs
@@ -233,7 +269,13 @@ map <C-t><left> :tabp<cr>
 map <C-t><right> :tabn<cr>
 set viminfo^=%
 
-map ! :shell<CR>  
+if has('nvim')
+    map ! :terminal<CR>a
+    tnoremap <Esc> <C-\><C-n>
+    tnoremap <C-v><Esc> <Esc>
+else
+    map ! :shell<CR>  
+end
 
 "line/column marker
 nnoremap <Leader>c :set cursorcolumn!<CR>
@@ -267,6 +309,8 @@ autocmd MyAutoCmd ColorScheme *  highlight TabLineFill guifg=skyblue gui=NONE ct
 
 source ~/.vim/vimrc_work
 source ~/.vim/vimrc_utils
+source ~/.vim/functions.vim
+
 "source ~/.vim/plugins/perforce.vim
 
 "tricks
