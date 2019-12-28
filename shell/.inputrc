@@ -5,3 +5,23 @@
 "\C-l":clear-screen
 "\er":"reload"
 "\ep":"select_patform"
+
+alias ..='cd ..'
+alias ...='cd ../..'
+alias ....='cd ../../..'
+alias devbox='ssh ikhan@10.15.21.170'
+alias reload='. ~/.bashrc'
+alias tml='tmux ls'
+alias tma='tmux -2 attach -t $1'
+
+if [ -f ~/.bash_aliases ]; then
+    . ~/.bash_aliases
+fi
+
+powerline-daemon -q
+export POWERLINE_BASH_CONTINUATION=1
+export POWERLINE_BASH_SELECT=1
+. ~/.local/lib/python3.6/site-packages/powerline/bindings/bash/powerline.sh
+
+[ -f ~/.fzf.bash ] && source ~/.fzf.bash
+
