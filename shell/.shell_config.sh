@@ -6,5 +6,5 @@ if [-f ~/.local/lib/python3.6/site-packages/powerline/bindings/bash/powerline.sh
 fi
 
 [ -f ~/.bash_aliases ] && source ~/.bash_aliases
-[ -f ~/.fzf.bash ] && source ~/.fzf.basho
+[ -f ~/.fzf.bash ] && source ~/.fzf.bash
 
