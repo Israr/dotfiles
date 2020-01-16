@@ -1,4 +1,5 @@
-if [-f ~/.local/lib/python3.6/site-packages/powerline/bindings/bash/powerline.sh ]; then
+export PATH=~/.local/bin:$PATH
+if [ -f ~/.local/lib/python3.6/site-packages/powerline/bindings/bash/powerline.sh ]; then
     powerline-daemon -q
     export POWERLINE_BASH_CONTINUATION=1
     export POWERLINE_BASH_SELECT=1
