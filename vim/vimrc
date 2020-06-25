@@ -1,12 +1,23 @@
+" vim: set ft=vim sw=4 ts=4 sts=4 et tw=78 foldlevel=0 foldmethod=marker:
 syntax on
 set nocompatible 
+set encoding=UTF-8
 "set t_Co=16
 set t_Co=256
+set cursorline
+set foldmethod=syntax
+set foldlevelstart=20
+set nu                                          " show line numbers
+set rnu                                         " show relative line numbers
+set ttyfast                                     " for faster redraws etc
+set autoread                                    " refresh if changed
+set expandtab                                   " indents <Tab> as spaces
+set timeout timeoutlen=1000 ttimeoutlen=100
+
 "set mousemodel=extend
 colorscheme desert
 "colorscheme molokai
 "colorscheme solarized
-"colorscheme molokai
 "let g:molokai_original = 1
 "let g:rehash256 = 1
 " provide tab completion for files under current directory 
@@ -17,8 +28,6 @@ set si "Smart indent
 set wrap "Wrap lines
 "set autochdir
 set runtimepath^=~/.vim/bundle/ag
-" Replace tabs with spaces "
-set expandtab
 " Make tab 4 space wide
 set tabstop=4
 set shiftwidth=4
@@ -39,15 +48,14 @@ Plugin 'liuchengxu/vim-which-key'
 "Plugin 'jlanzarotta/bufexplorer'
 Plugin 'majutsushi/tagbar'
 Plugin 'Shougo/unite.vim'
-
 "For searching using Ack command
 Plugin 'mileszs/ack.vim'
 Plugin 'junegunn/fzf'
 Plugin 'junegunn/fzf.vim'
-
+"icons
+"Plugin 'ryanoasis/vim-devicons'
 " for commenting
 Plugin 'scrooloose/nerdcommenter'
-
 "Plugin 'Shougo/denite.nvim'
 "Plugin 'roxma/nvim-yarp'
 "Plugin 'roxma/vim-hug-neovim-rpc'
@@ -58,30 +66,55 @@ Plugin 'Yggdroot/indentLine'
 Plugin 'easymotion/vim-easymotion'
 "import or drop (Vimport Vimdrop) python packages
 Plugin 'prakashdanish/vimport'
+Plugin 'jonmorehouse/vim-flow'
+Plugin 'tpope/vim-surround'
 "Plugin 'iangmiao/auto-pairs'
 "Plugin 'Shougo/vimproc.vim'
 "Plugin 'Shougo/vimshell.vim'
 "https://github.com/Shougo/deoplete.nvim
+" orange colorscheme
+"Plugin 'ayu-theme/ayu-vim'
+Plugin 'vim-airline/vim-airline'
+Plugin 'vim-airline/vim-airline-themes'
+" CtrlP buffer management, Provides C-P, CtrlP, and CtrlPBuffer commands
+Plugin 'ctrlpvim/ctrlp.vim'
 
+" Auto completion
 if has('nvim')
+  Plugin 'Shougo/defx.nvim', { 'do': ':UpdateRemotePlugins' }
+  Plugin 'kristijanhusak/defx-icons'
   Plugin 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
   let g:deoplete#enable_at_startup = 1
   inoremap <silent> <Leader><Tab> <C-r>=MyLeaderTabfunc()<CR>
   Plugin 'deoplete-plugins/deoplete-jedi'
 else
 " requires python3
-  "Plugin 'Shougo/deoplete.nvim'
-  "Plugin 'roxma/nvim-yarp'
-  "Plugin 'roxma/vim-hug-neovim-rpc'
+  Plugin 'Shougo/denite.nvim'
+  Plugin 'Shougo/deoplete.nvim'
+  Plugin 'Shougo/defx.nvim'
+  Plugin 'kristijanhusak/defx-icons'
+  Plugin 'roxma/nvim-yarp'
+  Plugin 'roxma/vim-hug-neovim-rpc'
+  Plugin 'deoplete-plugins/deoplete-jedi'
+  let g:deoplete#enable_at_startup = 1
 endif
+Plugin 'Shougo/neosnippet.vim'
+Plugin 'Shougo/neosnippet-snippets'
+Plugin 'Shougo/neopairs.vim'
 
 if has('nvim')
 "Plugin 'python-mode/python-mode'
 end
 Bundle 'jistr/vim-nerdtree-tabs'
 Bundle 'dbeniamine/cheat.sh-vim'
-call vundle#end()            " required
-
+" airline configuration {{{
+let g:airline#extensions#tabline#enabled = 1
+let g:airline#extensions#tabline#left_sep = ' '
+let g:airline#extensions#tabline#left_alt_sep = '|'
+let g:airline_powerline_fonts=1 
+let g:airline_theme='solarized'
+let g:airline_solarized_bg='dark'
+" }}}
 if executable('ag')
   let g:ackprg = 'ag --vimgrep'
 endif
@@ -89,7 +122,6 @@ endif
 let g:indentLine_color_term = 239
 "let g:indentLine_char = 'c'
 
-set autoread
 " Fast saving
 nmap <leader>w :w!<cr>
 "map g :Ag 
@@ -97,6 +129,35 @@ nmap <leader>w :w!<cr>
 "setup pathogen
 execute pathogen#infect()
 
+" NeoPairs {{{
+let g:neopairs#enable=1
+let g:neopairs#auto_delimiter = 1
+let g:neopairs#pairs={'[' : ']',  '(' : ')',  '{' : '}',  '`' : '`',  '"' : ':'}
+" }}}
+
+" Plugin key-mappings for neosnippets. {{{
+" Note: It must be "imap" and "smap".  It uses <Plug> mappings.
+imap <C-k>     <Plug>(neosnippet_expand_or_jump)
+smap <C-k>     <Plug>(neosnippet_expand_or_jump)
+xmap <C-k>     <Plug>(neosnippet_expand_target)
+call deoplete#custom#option('auto_complete_delay', 100)
+" SuperTab like snippets behavior.
+" Note: It must be "imap" and "smap".  It uses <Plug> mappings.
+"imap <expr><TAB>
+" \ pumvisible() ? "\<C-n>" :
+" \ neosnippet#expandable_or_jumpable() ?
+" \    "\<Plug>(neosnippet_expand_or_jump)" : "\<TAB>"
+smap <expr><TAB> neosnippet#expandable_or_jumpable() ?
+\ "\<Plug>(neosnippet_expand_or_jump)" : "\<TAB>"
+" For conceal markers.
+if has('conceal')
+    set conceallevel=2 concealcursor=niv
+endif
+
+"}}}
+
+"function! BufPopup()
+"endfunction
 " Returns true if paste mode is enabled
 function! HasPaste()
     if &paste
@@ -126,6 +187,12 @@ noremap <M-k> 4k
 " map semi-colon to colon
 nnoremap <silent> <leader> :WhichKey '\'<CR>
 
+"automatically close pairs quotes, brackets, etc.
+"inoremap " ""<left>
+"inoremap ' ''<left>
+"inoremap ( ()<left>
+"inoremap [ []<left>
+"inoremap { {}<left>
 
 function! FindInc()
   let oldPath=&path
@@ -163,9 +230,9 @@ endfun
 if has('nvim')
     "echo "no powerline"
 else
-python from powerline.vim import setup as powerline_setup
-python powerline_setup()
-python del powerline_setup
+"python3 from powerline.vim import setup as powerline_setup
+"python3 powerline_setup()
+"python3 del powerline_setup
 end
 
 function! ShowSpaces(...)  
@@ -188,7 +255,6 @@ function! StripTrailingWhitespace()
     normal `z
   endif
 endfunction
-
 
 " Define mappings
 autocmd FileType denite call s:denite_my_settings()
@@ -213,9 +279,6 @@ set laststatus=2
 set showtabline=2 " Always display the tabline, even if there is only one tab
 set noshowmode " Hide the default mode text (e.g. -- INSERT -- below the statusline). Useful with powerline
 set mouse=a
-set nu " show line numbers
-set rnu " show relative line numbers
-set cursorline
 "hi CursorLine   cterm=NONE ctermbg=darkred ctermfg=white guibg=darkred guifg=white
 set showmatch           " highlight matching [{()}]
 set wildmenu            " visual autocomplete for command menu
@@ -230,9 +293,15 @@ map <C-l> <C-W>l
 "vim filer
 "map <F3> :VimFiler -explorer -force-hide<CR>
 map <leader>nt  :NERDTreeTabsToggle<CR>
-map <F3>  :NERDTreeTabsToggle<CR>
+"map <F3>  :NERDTreeTabsToggle<CR>
+
 map <leader>o  :VimFiler<CR>
 map <leader>b  :Buffers<CR>
+map <Space>b  :Buffers<CR>
+map <Space>l  :Lines<CR>
+"map <Space>d  :<CR>
+"close buffer
+map <leader>q  :bd<CR>
 map <leader>t  :Tags<CR>
 "map <leader>f  :Files<CR>
 "fast window switching
@@ -240,7 +309,6 @@ map <F5> :call CIncSw()<CR>
 map <F6> :bnext<CR>
 map <F4> :bd<CR>
 nmap <F8> o<Esc>
-nmap <F12> :terminal<CR>
 "nmap <CR><CR> o<ESC>
 "map <C-b> :shell<CR>
 "map <C-b> :!./run.sh local<CR>
@@ -259,6 +327,7 @@ nmap <Leader><Leader>w <Plug>(easymotion-overwin-w)
 nmap <Leader><Leader>f <Plug>(easymotion-overwin-f)
 
 map <leader><leader>v  :e ~/.vim/vimrc<CR>
+map <leader><leader>r  :e ~/roku/roku.sh<CR>
 map <leader><leader>h  :History<CR>
 "map <leader>t  :tabnext<CR>
 "map <leader>tn :tabnew<cr>
@@ -277,6 +346,11 @@ else
     map ! :shell<CR>  
 end
 
+if has('terminal')
+    nmap <F12> :terminal<CR>
+else
+    nmap <F12> :shell<CR>
+end
 "line/column marker
 nnoremap <Leader>c :set cursorcolumn!<CR>
 nnoremap <Leader>r :set rnu! cursorline! <CR>
@@ -309,6 +383,8 @@ autocmd MyAutoCmd ColorScheme *  highlight TabLineFill guifg=skyblue gui=NONE ct
 
 source ~/.vim/vimrc_work
 source ~/.vim/vimrc_utils
+source ~/.vim/vimik_defx.vim
+"source ~/.vim/vimik_proj.vim
 source ~/.vim/functions.vim
 
 "source ~/.vim/plugins/perforce.vim

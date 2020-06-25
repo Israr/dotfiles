@@ -12,6 +12,7 @@ function! ToggleNumber()
         set relativenumber
     endif
 endf
+
 function! ToggleBG()
     let s:tbg = &background
     " Inversion
@@ -21,4 +22,44 @@ function! ToggleBG()
         set background=dark
     endif
 endfunction
+
+function! ToggleSyntaxHighlighthing()
+    if exists('g:syntax_on')
+        syntax off
+    else
+        syntax enable
+    endif
+endfunction
+
+function! ToggleWrap()
+    if &wrap
+        set list
+        set nowrap
+    else
+        set nolist
+        set wrap
+    endif
+endfunction
+
+
+function! DeleteMultipleEmptyLines()
+    g/^\_$\n\_^$/d
+endfunction
+
+function! StripTrailingWhitespace()
+    let l:save = winsaveview()
+    %s/\s\+$//e
+    call winrestview(l:save)
+endfunction
+"augroup StripTrailingWhitespace
+    "autocmd!
+    "autocmd FileType c,cpp,cfg,conf,css,html,perl,python,sh,tex,yaml
+        "\ autocmd BufWritePre <buffer> :call
+        "\ StripTrailingWhitespace()
+"augroup END
+
+function! ToggleTagbar()
+    execute ":TagbarToggle"
+endfunction
+
 
