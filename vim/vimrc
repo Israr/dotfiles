@@ -127,7 +127,7 @@ nmap <leader>w :w!<cr>
 "map g :Ag 
 
 "setup pathogen
-execute pathogen#infect()
+"execute pathogen#infect()
 
 " NeoPairs {{{
 let g:neopairs#enable=1
@@ -230,9 +230,15 @@ endfun
 if has('nvim')
     "echo "no powerline"
 else
+<<<<<<< HEAD
 "python3 from powerline.vim import setup as powerline_setup
 "python3 powerline_setup()
 "python3 del powerline_setup
+=======
+python3 from powerline.vim import setup as powerline_setup
+python3 powerline_setup()
+python3 del powerline_setup
+>>>>>>> 43ee4d74e51fe7eae37b188956ec71576dd79d0b
 end
 
 function! ShowSpaces(...)  
@@ -381,7 +387,7 @@ autocmd MyAutoCmd ColorScheme *  highlight TabLineFill guifg=skyblue gui=NONE ct
 autocmd MyAutoCmd ColorScheme *  highlight TabLineSel  guifg=lightgoldenrod2 gui=bold ctermfg=186 cterm=bold
 autocmd MyAutoCmd ColorScheme *  highlight TabLineFill guifg=skyblue gui=NONE ctermfg=117 cterm=NONE
 
-source ~/.vim/vimrc_work
+"source ~/.vim/vimrc_work
 source ~/.vim/vimrc_utils
 source ~/.vim/vimik_defx.vim
 "source ~/.vim/vimik_proj.vim
