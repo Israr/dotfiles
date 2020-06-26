@@ -1,132 +1,132 @@
-" vim: set ft=vim sw=4 ts=4 sts=4 et tw=78 foldlevel=0 foldmethod=marker:
-syntax on
-set nocompatible 
-set encoding=UTF-8
-"set t_Co=16
-set t_Co=256
-set cursorline
-set foldmethod=syntax
-set foldlevelstart=20
-set nu                                          " show line numbers
-set rnu                                         " show relative line numbers
-set ttyfast                                     " for faster redraws etc
-set autoread                                    " refresh if changed
-set expandtab                                   " indents <Tab> as spaces
-set timeout timeoutlen=1000 ttimeoutlen=100
+    " vim: set ft=vim sw=4 ts=4 sts=4 et tw=78 foldlevel=0 foldmethod=marker:
+    syntax on
+    set nocompatible 
+    set encoding=UTF-8
+    "set t_Co=16
+    set t_Co=256
+    set cursorline
+    set foldmethod=syntax
+    set foldlevelstart=20
+    set nu                                          " show line numbers
+    set rnu                                         " show relative line numbers
+    set ttyfast                                     " for faster redraws etc
+    set autoread                                    " refresh if changed
+    set expandtab                                   " indents <Tab> as spaces
+    set timeout timeoutlen=1000 ttimeoutlen=100
 
-"set mousemodel=extend
-colorscheme desert
-"colorscheme molokai
-"colorscheme solarized
-"let g:molokai_original = 1
-"let g:rehash256 = 1
-" provide tab completion for files under current directory 
-set path=**
-set background=dark
-set ai "Auto indent
-set si "Smart indent
-set wrap "Wrap lines
-"set autochdir
-set runtimepath^=~/.vim/bundle/ag
-" Make tab 4 space wide
-set tabstop=4
-set shiftwidth=4
-set autoindent
-set incsearch
-set hlsearch
-" Set to auto read when a file is changed from the outside
-filetype off                  " required
-filetype plugin on
-set rtp+=~/.vim/bundle/Vundle.vim
-" add angular brackets to match pairs (% toggles between matchpair)
-set matchpairs+=<:>
-call vundle#begin()
-Plugin 'VundleVim/Vundle.vim'
-Plugin 'liuchengxu/vim-which-key'
-"Plugin 'Valloric/YouCompleteMe'
-"commandT provides bufexplorer functionality
-"Plugin 'jlanzarotta/bufexplorer'
-Plugin 'majutsushi/tagbar'
-Plugin 'Shougo/unite.vim'
-"For searching using Ack command
-Plugin 'mileszs/ack.vim'
-Plugin 'junegunn/fzf'
-Plugin 'junegunn/fzf.vim'
-"icons
-"Plugin 'ryanoasis/vim-devicons'
-" for commenting
-Plugin 'scrooloose/nerdcommenter'
-"Plugin 'Shougo/denite.nvim'
-"Plugin 'roxma/nvim-yarp'
-"Plugin 'roxma/vim-hug-neovim-rpc'
-Plugin 'Shougo/vimfiler.vim'
-Plugin 'sheerun/vim-polyglot'
-Plugin 'christoomey/vim-tmux-navigator'
-Plugin 'Yggdroot/indentLine'
-Plugin 'easymotion/vim-easymotion'
-"import or drop (Vimport Vimdrop) python packages
-Plugin 'prakashdanish/vimport'
-Plugin 'jonmorehouse/vim-flow'
-Plugin 'tpope/vim-surround'
-"Plugin 'iangmiao/auto-pairs'
-"Plugin 'Shougo/vimproc.vim'
-"Plugin 'Shougo/vimshell.vim'
-"https://github.com/Shougo/deoplete.nvim
-" orange colorscheme
-"Plugin 'ayu-theme/ayu-vim'
-Plugin 'vim-airline/vim-airline'
-Plugin 'vim-airline/vim-airline-themes'
-" CtrlP buffer management, Provides C-P, CtrlP, and CtrlPBuffer commands
-Plugin 'ctrlpvim/ctrlp.vim'
+    "set mousemodel=extend
+    colorscheme desert
+    "colorscheme molokai
+    "colorscheme solarized
+    "let g:molokai_original = 1
+    "let g:rehash256 = 1
+    " provide tab completion for files under current directory 
+    set path=**
+    set background=dark
+    set ai "Auto indent
+    set si "Smart indent
+    set wrap "Wrap lines
+    "set autochdir
+    set runtimepath^=~/.vim/bundle/ag
+    " Make tab 4 space wide
+    set tabstop=4
+    set shiftwidth=4
+    set autoindent
+    set incsearch
+    set hlsearch
+    " Set to auto read when a file is changed from the outside
+    filetype off                  " required
+    filetype plugin on
+    set rtp+=~/.vim/bundle/Vundle.vim
+    " add angular brackets to match pairs (% toggles between matchpair)
+    set matchpairs+=<:>
+    call vundle#begin()
+    Plugin 'VundleVim/Vundle.vim'
+    Plugin 'liuchengxu/vim-which-key'
+    "Plugin 'Valloric/YouCompleteMe'
+    "commandT provides bufexplorer functionality
+    "Plugin 'jlanzarotta/bufexplorer'
+    Plugin 'majutsushi/tagbar'
+    Plugin 'Shougo/unite.vim'
+    "For searching using Ack command
+    Plugin 'mileszs/ack.vim'
+    Plugin 'junegunn/fzf'
+    Plugin 'junegunn/fzf.vim'
+    "icons
+    "Plugin 'ryanoasis/vim-devicons'
+    " for commenting
+    Plugin 'scrooloose/nerdcommenter'
+    "Plugin 'Shougo/denite.nvim'
+    "Plugin 'roxma/nvim-yarp'
+    "Plugin 'roxma/vim-hug-neovim-rpc'
+    Plugin 'Shougo/vimfiler.vim'
+    Plugin 'sheerun/vim-polyglot'
+    Plugin 'christoomey/vim-tmux-navigator'
+    Plugin 'Yggdroot/indentLine'
+    Plugin 'easymotion/vim-easymotion'
+    "import or drop (Vimport Vimdrop) python packages
+    Plugin 'prakashdanish/vimport'
+    Plugin 'jonmorehouse/vim-flow'
+    Plugin 'tpope/vim-surround'
+    "Plugin 'iangmiao/auto-pairs'
+    "Plugin 'Shougo/vimproc.vim'
+    "Plugin 'Shougo/vimshell.vim'
+    "https://github.com/Shougo/deoplete.nvim
+    " orange colorscheme
+    "Plugin 'ayu-theme/ayu-vim'
+    Plugin 'vim-airline/vim-airline'
+    Plugin 'vim-airline/vim-airline-themes'
+    " CtrlP buffer management, Provides C-P, CtrlP, and CtrlPBuffer commands
+    Plugin 'ctrlpvim/ctrlp.vim'
 
-" Auto completion
-if has('nvim')
-  Plugin 'Shougo/defx.nvim', { 'do': ':UpdateRemotePlugins' }
-  Plugin 'kristijanhusak/defx-icons'
-  Plugin 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
-  let g:deoplete#enable_at_startup = 1
-  inoremap <silent> <Leader><Tab> <C-r>=MyLeaderTabfunc()<CR>
-  Plugin 'deoplete-plugins/deoplete-jedi'
-else
-" requires python3
-  Plugin 'Shougo/denite.nvim'
-  Plugin 'Shougo/deoplete.nvim'
-  Plugin 'Shougo/defx.nvim'
-  Plugin 'kristijanhusak/defx-icons'
-  Plugin 'roxma/nvim-yarp'
-  Plugin 'roxma/vim-hug-neovim-rpc'
-  Plugin 'deoplete-plugins/deoplete-jedi'
-  let g:deoplete#enable_at_startup = 1
-endif
-Plugin 'Shougo/neosnippet.vim'
-Plugin 'Shougo/neosnippet-snippets'
-Plugin 'Shougo/neopairs.vim'
+    " Auto completion
+    if has('nvim')
+      Plugin 'Shougo/defx.nvim', { 'do': ':UpdateRemotePlugins' }
+      Plugin 'kristijanhusak/defx-icons'
+      Plugin 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
+      let g:deoplete#enable_at_startup = 1
+      inoremap <silent> <Leader><Tab> <C-r>=MyLeaderTabfunc()<CR>
+      Plugin 'deoplete-plugins/deoplete-jedi'
+    else
+    " requires python3
+      Plugin 'Shougo/denite.nvim'
+      Plugin 'Shougo/deoplete.nvim'
+      Plugin 'Shougo/defx.nvim'
+      Plugin 'kristijanhusak/defx-icons'
+      Plugin 'roxma/nvim-yarp'
+      Plugin 'roxma/vim-hug-neovim-rpc'
+      Plugin 'deoplete-plugins/deoplete-jedi'
+      let g:deoplete#enable_at_startup = 1
+    endif
+    Plugin 'Shougo/neosnippet.vim'
+    Plugin 'Shougo/neosnippet-snippets'
+    Plugin 'Shougo/neopairs.vim'
 
-if has('nvim')
-"Plugin 'python-mode/python-mode'
-end
-Bundle 'jistr/vim-nerdtree-tabs'
-Bundle 'dbeniamine/cheat.sh-vim'
-" airline configuration {{{
-let g:airline#extensions#tabline#enabled = 1
-let g:airline#extensions#tabline#left_sep = ' '
-let g:airline#extensions#tabline#left_alt_sep = '|'
-let g:airline_powerline_fonts=1 
-let g:airline_theme='solarized'
-let g:airline_solarized_bg='dark'
-" }}}
-if executable('ag')
-  let g:ackprg = 'ag --vimgrep'
-endif
+    if has('nvim')
+    "Plugin 'python-mode/python-mode'
+    end
+    Bundle 'jistr/vim-nerdtree-tabs'
+    Bundle 'dbeniamine/cheat.sh-vim'
+    " airline configuration {{{
+    let g:airline#extensions#tabline#enabled = 1
+    let g:airline#extensions#tabline#left_sep = ' '
+    let g:airline#extensions#tabline#left_alt_sep = '|'
+    let g:airline_powerline_fonts=1 
+    let g:airline_theme='solarized'
+    let g:airline_solarized_bg='dark'
+    " }}}
+    if executable('ag')
+      let g:ackprg = 'ag --vimgrep'
+    endif
 
-let g:indentLine_color_term = 239
-"let g:indentLine_char = 'c'
+    let g:indentLine_color_term = 239
+    "let g:indentLine_char = 'c'
 
-" Fast saving
-nmap <leader>w :w!<cr>
-"map g :Ag 
+    " Fast saving
+    nmap <leader>w :w!<cr>
+    "map g :Ag 
 
-"setup pathogen
+    "setup pathogen
 "execute pathogen#infect()
 
 " NeoPairs {{{
@@ -230,15 +230,9 @@ endfun
 if has('nvim')
     "echo "no powerline"
 else
-<<<<<<< HEAD
 "python3 from powerline.vim import setup as powerline_setup
 "python3 powerline_setup()
 "python3 del powerline_setup
-=======
-python3 from powerline.vim import setup as powerline_setup
-python3 powerline_setup()
-python3 del powerline_setup
->>>>>>> 43ee4d74e51fe7eae37b188956ec71576dd79d0b
 end
 
 function! ShowSpaces(...)  
