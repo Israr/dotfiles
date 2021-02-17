@@ -107,6 +107,8 @@
     end
     Bundle 'jistr/vim-nerdtree-tabs'
     Bundle 'dbeniamine/cheat.sh-vim'
+    call vundle#end()            " required
+    
     " airline configuration {{{
     let g:airline#extensions#tabline#enabled = 1
     let g:airline#extensions#tabline#left_sep = ' '
@@ -140,7 +142,7 @@ let g:neopairs#pairs={'[' : ']',  '(' : ')',  '{' : '}',  '`' : '`',  '"' : ':'}
 imap <C-k>     <Plug>(neosnippet_expand_or_jump)
 smap <C-k>     <Plug>(neosnippet_expand_or_jump)
 xmap <C-k>     <Plug>(neosnippet_expand_target)
-call deoplete#custom#option('auto_complete_delay', 100)
+"call deoplete#custom#option('auto_complete_delay', 100)
 " SuperTab like snippets behavior.
 " Note: It must be "imap" and "smap".  It uses <Plug> mappings.
 "imap <expr><TAB>
@@ -291,7 +293,7 @@ map <C-k> <C-W>k
 map <C-h> <C-W>h
 map <C-l> <C-W>l
 "vim filer
-"map <F3> :VimFiler -explorer -force-hide<CR>
+map <F3> :VimFiler -explorer -force-hide<CR>
 map <leader>nt  :NERDTreeTabsToggle<CR>
 "map <F3>  :NERDTreeTabsToggle<CR>
 
@@ -321,13 +323,14 @@ map N Nzzzv
 "map " <leader>cu
 map  <Leader><Leader>t :TagbarToggle<CR>
 "Easy motion key mappings
-"map  <Leader><Leader>w <Plug>(easymotion-bd-w)
+
+map  <Leader><Leader>w <Plug>(easymotion-bd-w)
 nmap <Leader><Leader>w <Plug>(easymotion-overwin-w)
-"map  <Leader><Leader>f <Plug>(easymotion-bd-f)
+map  <Leader><Leader>f <Plug>(easymotion-bd-f)
 nmap <Leader><Leader>f <Plug>(easymotion-overwin-f)
 
 map <leader><leader>v  :e ~/.vim/vimrc<CR>
-map <leader><leader>r  :e ~/roku/roku.sh<CR>
+map <leader><leader>r  :e ~/roku.sh<CR>
 map <leader><leader>h  :History<CR>
 "map <leader>t  :tabnext<CR>
 "map <leader>tn :tabnew<cr>
@@ -383,8 +386,8 @@ autocmd MyAutoCmd ColorScheme *  highlight TabLineFill guifg=skyblue gui=NONE ct
 
 "source ~/.vim/vimrc_work
 source ~/.vim/vimrc_utils
-source ~/.vim/vimik_defx.vim
-"source ~/.vim/vimik_proj.vim
+"source ~/.vim/vimik_defx.vim
+source ~/.vim/vimik_proj.vim
 source ~/.vim/functions.vim
 
 "source ~/.vim/plugins/perforce.vim
