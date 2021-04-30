@@ -1,0 +1,59 @@
+[core]
+  pager = delta
+
+[delta]
+  plus-color = "#012800"
+  minus-color = "#340001"
+  syntax-theme = Monokai Extended
+  side-by-side = true
+  line-numbers = true
+  features = unobtrusive-line-numbers decorations
+
+[delta "unobtrusive-line-numbers"]
+  line-numbers = true
+  line-numbers-minus-style = "#444444"
+  line-numbers-zero-style = "#444444"
+  line-numbers-plus-style = "#444444"
+  line-numbers-left-format = "{nm:>4}┊"
+  line-numbers-right-format = "{np:>4}│"
+  line-numbers-left-style = blue
+  line-numbers-right-style = blue
+
+[delta "decorations"]
+  commit-decoration-style = bold yellow box ul
+  file-style = bold yellow ul
+  file-decoration-style = none
+  hunk-header-decoration-style = yellow box
+
+[interactive]
+	diffFilter = delta --color-only
+
+[user]
+	email = email_address@here
+	name = Israr Khan
+[filter "lfs"]
+	clean = git-lfs clean -- %f
+	smudge = git-lfs smudge -- %f
+	process = git-lfs filter-process
+	required = true
+[alias]
+	st = status
+    # alias=!git config --list | grep 'alias\.' | sed 's/alias\.\([^=]*\)=\(.*\)/\1\	 => \2/' 
+    a  = !git add . && git status
+    aa	 = !git add . && git add -u . && git status
+    ac	 = !git add . && git commit
+    acm	 = !git add . && git commit -m
+    au	 = !git add -u . && git status
+    c	 = commit
+    ca	 = commit --amend
+    cm	 = commit -m
+    d	 = diff
+    l	 = log --graph --all --pretty=format:'%C(yellow)%h%C(cyan)%d%Creset %s %C(white)- %an, %ar%Creset'
+    lg	 = log --color --graph --pretty=format:'%C(bold white)%h%Creset -%C(bold green)%d%Creset %s %C(bold green)(%cr)%Creset %C(bold blue)<%an>%Creset' --abbrev-commit --date=relative
+    ll	 = log --stat --abbrev-commit
+    llg	 = log --color --graph --pretty=format:'%C(bold white)%H %d%Creset%n%s%n%+b%C(bold blue)%an <%ae>%Creset %C(bold green)%cr (%ci)' --abbrev-commit
+    master	 = checkout master
+    s	 = status
+    spull	 = svn rebase
+    spush	 = svn dcommit
+
