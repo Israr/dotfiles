@@ -13,6 +13,9 @@ lvim.log.level = "warn"
 lvim.format_on_save = false
 lvim.lint_on_save = true
 lvim.colorscheme = "tokyonight"
+-- Enable DAP. Install adapters with DIInstall/DIUnistall. List with DIList
+lvim.builtin.dap.active = true
+
 
 -- keymappings [view all the defaults by pressing <leader>Lk]
 lvim.leader = "space"
@@ -26,6 +29,7 @@ lvim.keys.normal_mode["<S-tab>"] = ":BufferLineCyclePrev<cr>"
 lvim.keys.normal_mode["<leader>n"] = ":nohlsearch<CR>"
 lvim.keys.normal_mode["<leader>j"] = ":HopWord<CR>"
 lvim.keys.normal_mode["<leader>k"] = ":HopChar1<CR>"
+lvim.keys.normal_mode["<leader>lg"] = ":lua Lazygit()<CR>"
 -- unmap a default keymapping
 -- lvim.keys.normal_mode["<C-Up>"] = ""
 -- edit a default keymapping
@@ -116,14 +120,16 @@ lvim.plugins = {
       config = function() require "lsp_signature".on_attach() end,
       event = "InsertEnter"
     },
-    { "github/copilot.vim" },
+    -- { "github/copilot.vim" },
     {
         'phaazon/hop.nvim',
         branch = 'v1', -- optional but strongly recommended
         config = function()
             -- you can configure Hop the way you like here; see :h hop-config
             require 'hop'.setup { keys = 'etovxqpdygfblzhckisuran' }
-        end
+            -- vim.api.nvim_set_keymap("n", "<leader>s", ":HopChar2<cr>", { silent = true })
+            -- vim.api.nvim_set_keymap("n", "<leader>S", ":HopWord<cr>", { silent = true })
+       end
     }
 }
 
@@ -134,8 +140,19 @@ lvim.autocommands.custom_groups = {
 }
 
 function Hello()
+    -- vim.inspect(lvim.builtin.gitsigns)
+    -- '<C-t>'  toggle term
     print("hello from ikhan")
 end
+
+
+function Lazygit()
+  local Terminal  = require('toggleterm.terminal').Terminal
+  local lazygit = Terminal:new({ cmd = "lazygit", hidden = true })
+  lazygit:toggle()
+end
+
+-- vim.api.nvim_set_keymap("n", "<leader>lg", "<cmd>lua Lazygit_toggle()<CR>", {noremap = true, silent = true})
 
 
 
