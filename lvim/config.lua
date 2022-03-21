@@ -30,8 +30,15 @@ lvim.keys.normal_mode["<leader>n"] = ":nohlsearch<CR>"
 lvim.keys.normal_mode["<leader>j"] = ":HopWord<CR>"
 lvim.keys.normal_mode["<leader>k"] = ":HopChar1<CR>"
 lvim.keys.normal_mode["<leader>lg"] = ":lua Lazygit()<CR>"
+lvim.keys.normal_mode["<leader>dxc"] = ":lua require\"telescope\".extensions.dap.commands{}<CR>"
+lvim.keys.normal_mode["<leader>dxo"] = ":lua require\"telescope\".extensions.dap.configurations{}<CR>"
+lvim.keys.normal_mode["<leader>dxv"] = ":lua require\"telescope\".extensions.dap.variables{}<CR>"
+--lua local widgets=require'dap.ui.widgets';widgets.centered_float(widgets.scopes)<CR>
+lvim.keys.normal_mode["<leader>dxf"] = ":lua require\"telescope\".extensions.dap.frames{}<CR>"
 -- unmap a default keymapping
 -- lvim.keys.normal_mode["<C-Up>"] = ""
+lvim.keys.normal_mode["<C-l>"] = false
+-- lvim.keys.normal_mode["<C-L>"] = ""
 -- edit a default keymapping
 -- lvim.keys.normal_mode["<C-q>"] = ":q<cr>"
 
@@ -62,7 +69,8 @@ lvim.builtin.which_key.mappings["P"] = { "<cmd>Telescope projects<CR>", "Project
 
 -- TODO: User Config for predefined plugins
 -- After changing plugin config exit and reopen LunarVim, Run :PackerInstall :PackerCompile
-lvim.builtin.dashboard.active = true
+-- lvim.builtin.dashboard.active = true
+lvim.builtin.alpha.active = true
 lvim.builtin.terminal.active = true
 lvim.builtin.nvimtree.side = "left"
 lvim.builtin.nvimtree.show_icons.git = 0
@@ -123,14 +131,16 @@ lvim.plugins = {
     -- { "github/copilot.vim" },
     {
         'phaazon/hop.nvim',
-        branch = 'v1', -- optional but strongly recommended
+        branch = 'v1.3', -- optional but strongly recommended
         config = function()
             -- you can configure Hop the way you like here; see :h hop-config
             require 'hop'.setup { keys = 'etovxqpdygfblzhckisuran' }
             -- vim.api.nvim_set_keymap("n", "<leader>s", ":HopChar2<cr>", { silent = true })
             -- vim.api.nvim_set_keymap("n", "<leader>S", ":HopWord<cr>", { silent = true })
-       end
-    }
+        end
+    },
+    { 'nvim-telescope/telescope-dap.nvim' },
+    {"rcarriga/nvim-dap-ui", requires = {"mfussenegger/nvim-dap"}}
 }
 
 -- Autocommands (https://neovim.io/doc/user/autocmd.html)
@@ -145,14 +155,109 @@ function Hello()
     print("hello from ikhan")
 end
 
-
 function Lazygit()
-  local Terminal  = require('toggleterm.terminal').Terminal
-  local lazygit = Terminal:new({ cmd = "lazygit", hidden = true })
-  lazygit:toggle()
+    local Terminal  = require('toggleterm.terminal').Terminal
+    local lazygit   = Terminal:new({ cmd = "lazygit", hidden = true })
+    lazygit:toggle()
 end
 
 -- vim.api.nvim_set_keymap("n", "<leader>lg", "<cmd>lua Lazygit_toggle()<CR>", {noremap = true, silent = true})
 
 
+-- DAP
+local dap = require('dap')
+dap.adapters.python = {
+  type = 'executable';
+  command = '/home/ikhan/anaconda3/bin/python';
+  args = { '-m', 'debugpy.adapter' };
+}
+dap.configurations.python = {
+  {
+    -- The first three options are required by nvim-dap
+    type = 'python'; -- the type here established the link to the adapter definition: `dap.adapters.python`
+    request = 'launch';
+    name = "Launch file";
+
+    -- Options below are for debugpy, see https://github.com/microsoft/debugpy/wiki/Debug-configuration-settings for supported options
+
+    program = "${file}"; -- This configuration will launch the current file if used.
+    pythonPath = function()
+      -- debugpy supports launching an application with a different interpreter then the one used to launch debugpy itself.
+      -- The code below looks for a `venv` or `.venv` folder in the current directly and uses the python within.
+      -- You could adapt this - to for example use the `VIRTUAL_ENV` environment variable.
+      local cwd = vim.fn.getcwd()
+      if vim.fn.executable(cwd .. '/venv/bin/python') == 1 then
+        return cwd .. '/venv/bin/python'
+      elseif vim.fn.executable(cwd .. '/.venv/bin/python') == 1 then
+        return cwd .. '/.venv/bin/python'
+      else
+        return '/usr/bin/python'
+      end
+    end;
+  },
+}
+
+-- DAP Setup
+function DAPSetup()
+        local dap, dapui = require("dap"), require("dapui")
+        dapui.setup({
+          icons = { expanded = "▾", collapsed = "▸" },
+          mappings = {
+            -- Use a table to apply multiple mappings
+            expand = { "<CR>", "<2-LeftMouse>" },
+            open = "o",
+            remove = "d",
+            edit = "e",
+            repl = "r",
+            toggle = "t",
+          },
+          sidebar = {
+            -- You can change the order of elements in the sidebar
+            elements = {
+              -- Provide as ID strings or tables with "id" and "size" keys
+              {
+                id = "scopes",
+                size = 0.25, -- Can be float or integer > 1
+              },
+              { id = "breakpoints", size = 0.25 },
+              { id = "stacks", size = 0.25 },
+              { id = "watches", size = 00.25 },
+            },
+            size = 40,
+            position = "left", -- Can be "left", "right", "top", "bottom"
+          },
+          tray = {
+            elements = { "repl" },
+            size = 10,
+            position = "bottom", -- Can be "left", "right", "top", "bottom"
+          },
+          floating = {
+            max_height = nil, -- These can be integers or a float between 0 and 1.
+            max_width = nil, -- Floats will be treated as percentage of your screen.
+            border = "single", -- Border style. Can be "single", "double" or "rounded"
+            mappings = {
+              close = { "q", "<Esc>" },
+            },
+          },
+          windows = { indent = 1 },
+        })
+        dap.listeners.after.event_initialized["dapui_config"] = function()
+          dapui.open()
+        end
+        dap.listeners.before.event_terminated["dapui_config"] = function()
+          dapui.close()
+        end
+        dap.listeners.before.event_exited["dapui_config"] = function()
+          dapui.close()
+        end
+-- dapui.open()
+end
+function DAPClose()
+   require("dapui").close()
+end
+DAPSetup()
+
+-- Tricks
+-- Generate list of all config options
+-- lvim --headless +'lua require("lvim.utils").generate_settings()' +qa && sort -o lv-settings.lua{,}
 
