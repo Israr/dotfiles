@@ -180,20 +180,18 @@ lvim.builtin.treesitter.highlight.enabled = true
 lvim.plugins = {
     {"folke/tokyonight.nvim"},
     {
-    "phaazon/hop.nvim",
-    branch = 'v1.3', -- optional but strongly recommended
-    event = "BufRead",
-    config = function()
-      require("hop").setup()
-      -- vim.api.nvim_set_keymap("n", "s", ":HopChar2<cr>", { silent = true })
-      -- vim.api.nvim_set_keymap("n", "S", ":HopWord<cr>", { silent = true })
-    end,
+        "phaazon/hop.nvim",
+        branch = 'v1.3', -- optional but strongly recommended
+        event = "BufRead",
+        config = function()
+          require("hop").setup()
+          -- vim.api.nvim_set_keymap("n", "s", ":HopChar2<cr>", { silent = true })
+          -- vim.api.nvim_set_keymap("n", "S", ":HopWord<cr>", { silent = true })
+        end,
     },
-        -- branch = 'v1.3', -- optional but strongly recommended
-            -- you can configure Hop the way you like here; see :h hop-config
-            -- require 'hop'.setup { keys = 'etovxqpdygfblzhckisuran' }
-            -- vim.api.nvim_set_keymap("n", "<leader>s", ":HopChar2<cr>", { silent = true })
-            -- vim.api.nvim_set_keymap("n", "<leader>S", ":HopWord<cr>", { silent = true })
+    {"ethanholz/nvim-lastplace", config=function()
+      require'nvim-lastplace'.setup{ }
+    end},
     { 'nvim-telescope/telescope-dap.nvim' },
     {"rcarriga/nvim-dap-ui", requires = {"mfussenegger/nvim-dap"}}
 
