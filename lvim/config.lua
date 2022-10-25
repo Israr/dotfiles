@@ -12,17 +12,17 @@ an executable
 lvim.log.level = "warn"
 lvim.format_on_save = false
 lvim.lint_on_save = true
-lvim.colorscheme = "tokyonight"
+-- lvim.colorscheme = "tokyonight"
 -- to disable icons and use a minimalist setup, uncomment the following
 -- lvim.use_icons = false
 -- Enable DAP. Install adapters with DIInstall/DIUnistall. List with DIList
 lvim.builtin.dap.active = true
 
-
 -- keymappings [view all the defaults by pressing <leader>Lk]
 lvim.leader = "space"
 -- add your own keymapping
 lvim.keys.normal_mode["<C-s>"] = ":w<cr>"
+-- lvim.keys.normal_mode["<C-t>"] = ":ToggleTerm<cr>"
 lvim.keys.normal_mode["<leader>o"] = ":Telescope file_browser<cr>"
 lvim.keys.normal_mode["<leader>B"] = ":Telescope buffers<cr>"
 lvim.keys.normal_mode["<leader>r"] = ":e ~/roku/roku.sh<cr>"
@@ -31,13 +31,27 @@ lvim.keys.normal_mode["<S-tab>"] = ":BufferLineCyclePrev<cr>"
 lvim.keys.normal_mode["<leader>n"] = ":nohlsearch<CR>"
 lvim.keys.normal_mode["<leader>j"] = ":HopWord<CR>"
 lvim.keys.normal_mode["<leader>k"] = ":HopChar1<CR>"
-lvim.keys.normal_mode["<leader>lg"] = ":lua Lazygit()<CR>"
 lvim.keys.normal_mode["<leader>dxc"] = ":lua require\"telescope\".extensions.dap.commands{}<CR>"
 lvim.keys.normal_mode["<leader>dxo"] = ":lua require\"telescope\".extensions.dap.configurations{}<CR>"
 lvim.keys.normal_mode["<leader>dxv"] = ":lua require\"telescope\".extensions.dap.variables{}<CR>"
 --lua local widgets=require'dap.ui.widgets';widgets.centered_float(widgets.scopes)<CR>
 lvim.keys.normal_mode["<leader>dxf"] = ":lua require\"telescope\".extensions.dap.frames{}<CR>"
+-- vim.g.loaded_clipboard_provider = 0
+vim.g.clipboard = {
+  name = 'xsel',
+  copy = {
+    ['+'] = 'xsel --nodetach -i -b',
+    ['*'] = 'xsel --nodetach -i -b',
+  },
+  paste = {
+    ['+'] = 'xsel -o -b',
+    ['*'] = 'xsel -o -b',
+  },
+  cache_enabled = 1,
+}
 
+-- lvim.keys.normal_mode["<S-l>"] = ":BufferLineCycleNext<CR>"
+-- lvim.keys.normal_mode["<S-h>"] = ":BufferLineCyclePrev<CR>"
 -- unmap a default keymapping
 -- vim.keymap.del("n", "<C-Up>")
 -- override a default keymapping
@@ -61,6 +75,10 @@ lvim.keys.normal_mode["<leader>dxf"] = ":lua require\"telescope\".extensions.dap
 --   },
 -- }
 
+-- Change theme settings
+lvim.builtin.theme.options.dim_inactive = true
+lvim.builtin.theme.options.style = "storm"
+
 -- Use which-key to add extra bindings with the leader-key prefix
 lvim.builtin.which_key.mappings["P"] = { "<cmd>Telescope projects<CR>", "Projects" }
 -- lvim.builtin.which_key.mappings["t"] = {
@@ -70,14 +88,14 @@ lvim.builtin.which_key.mappings["P"] = { "<cmd>Telescope projects<CR>", "Project
 --   d = { "<cmd>Trouble document_diagnostics<cr>", "Diagnostics" },
 --   q = { "<cmd>Trouble quickfix<cr>", "QuickFix" },
 --   l = { "<cmd>Trouble loclist<cr>", "LocationList" },
---   w = { "<cmd>Trouble workspace_diagnostics<cr>", "Wordspace Diagnostics" },
+--   w = { "<cmd>Trouble workspace_diagnostics<cr>", "Workspace Diagnostics" },
 -- }
 
 -- TODO: User Config for predefined plugins
 -- After changing plugin config exit and reopen LunarVim, Run :PackerInstall :PackerCompile
 lvim.builtin.alpha.active = true
 lvim.builtin.alpha.mode = "dashboard"
-lvim.builtin.notify.active = true
+-- lvim.builtin.notify.active = true
 lvim.builtin.terminal.active = true
 lvim.builtin.nvimtree.setup.view.side = "left"
 lvim.builtin.nvimtree.setup.renderer.icons.show.git = false
@@ -99,7 +117,7 @@ lvim.builtin.treesitter.ensure_installed = {
 }
 
 lvim.builtin.treesitter.ignore_install = { "haskell" }
-lvim.builtin.treesitter.highlight.enabled = true
+lvim.builtin.treesitter.highlight.enable = true
 
 -- generic LSP settings
 
@@ -118,7 +136,7 @@ lvim.builtin.treesitter.highlight.enabled = true
 -- }
 
 -- ---@usage disable automatic installation of servers
--- lvim.lsp.automatic_servers_installation = false
+-- lvim.lsp.installer.setup.automatic_installation = false
 
 -- ---configure a server manually. !!Requires `:LvimCacheReset` to take effect!!
 -- ---see the full default list `:lua print(vim.inspect(lvim.lsp.automatic_configuration.skipped_servers))`
@@ -128,7 +146,7 @@ lvim.builtin.treesitter.highlight.enabled = true
 
 -- ---remove a server from the skipped list, e.g. eslint, or emmet_ls. !!Requires `:LvimCacheReset` to take effect!!
 -- ---`:LvimInfo` lists which server(s) are skipped for the current filetype
--- vim.tbl_map(function(server)
+-- lvim.lsp.automatic_configuration.skipped_servers = vim.tbl_filter(function(server)
 --   return server ~= "emmet_ls"
 -- end, lvim.lsp.automatic_configuration.skipped_servers)
 
@@ -175,57 +193,48 @@ lvim.builtin.treesitter.highlight.enabled = true
 --     filetypes = { "javascript", "python" },
 --   },
 -- }
+lvim.plugins = {
+  -- {"folke/tokyonight.nvim"},
+  {
+    "phaazon/hop.nvim",
+    branch = 'v1.3', -- optional but strongly recommended
+    event = "BufRead",
+    config = function()
+      require("hop").setup()
+      -- vim.api.nvim_set_keymap("n", "s", ":HopChar2<cr>", { silent = true })
+      -- vim.api.nvim_set_keymap("n", "S", ":HopWord<cr>", { silent = true })
+    end,
+  },
+  { "ethanholz/nvim-lastplace", config = function()
+    require 'nvim-lastplace'.setup {}
+  end },
+  { 'nvim-telescope/telescope-dap.nvim' },
+  -- {"rcarriga/nvim-dap-ui", requires = {"mfussenegger/nvim-dap"}},
+}
 
 -- Additional Plugins
-lvim.plugins = {
-    {"folke/tokyonight.nvim"},
-    {
-        "phaazon/hop.nvim",
-        branch = 'v1.3', -- optional but strongly recommended
-        event = "BufRead",
-        config = function()
-          require("hop").setup()
-          -- vim.api.nvim_set_keymap("n", "s", ":HopChar2<cr>", { silent = true })
-          -- vim.api.nvim_set_keymap("n", "S", ":HopWord<cr>", { silent = true })
-        end,
-    },
-    {"ethanholz/nvim-lastplace", config=function()
-      require'nvim-lastplace'.setup{ }
-    end},
-    { 'nvim-telescope/telescope-dap.nvim' },
-    {"rcarriga/nvim-dap-ui", requires = {"mfussenegger/nvim-dap"}}
-
-}
+-- lvim.plugins = {
+--     {
+--       "folke/trouble.nvim",
+--       cmd = "TroubleToggle",
+--     },
+-- }
 
 -- Autocommands (https://neovim.io/doc/user/autocmd.html)
 vim.api.nvim_create_autocmd("BufEnter", {
-   pattern = { "*.lua", "*.json" },
-   -- enable wrap mode for json files only
-   command = "setlocal ts=2 sw=2",
+  pattern = { "*.lua", "*.json" },
+  -- enable wrap mode for json files only
+  command = "setlocal ts=2 sw=2",
 })
 vim.api.nvim_create_autocmd("BufReadPost", {
-   pattern = { "*" },
-   -- set relative line numbers
-   command = "set rnu",
+  pattern = { "*" },
+  -- set relative line numbers
+  command = "set rnu",
 })
--- vim.api.nvim_create_autocmd("FileType", {
---   pattern = "zsh",
---   callback = function()
---     -- let treesitter use bash highlight for zsh files as well
---     require("nvim-treesitter.highlight").attach(0, "bash")
---   end,
--- })
-
-
-function Lazygit()
-    local Terminal  = require('toggleterm.terminal').Terminal
-    local lazygit   = Terminal:new({ cmd = "lazygit", hidden = true })
-    lazygit:toggle()
-end
 
 function Hello()
-    -- vim.inspect(lvim.builtin.gitsigns)
-    print("hello from ikhan")
+  -- vim.inspect(lvim.builtin.gitsigns)
+  print("hello from ikhan")
 end
 
 -- DAP
@@ -263,65 +272,74 @@ dap.configurations.python = {
 
 -- DAP Setup
 function DAPSetup()
-        local dap, dapui = require("dap"), require("dapui")
-        dapui.setup({
-          icons = { expanded = "▾", collapsed = "▸" },
-          mappings = {
-            -- Use a table to apply multiple mappings
-            expand = { "<CR>", "<2-LeftMouse>" },
-            open = "o",
-            remove = "d",
-            edit = "e",
-            repl = "r",
-            toggle = "t",
-          },
+  local dap, dapui = require("dap"), require("dapui")
+  dapui.setup({
+    icons = { expanded = "▾", collapsed = "▸" },
+    mappings = {
+      -- Use a table to apply multiple mappings
+      expand = { "<CR>", "<2-LeftMouse>" },
+      open = "o",
+      remove = "d",
+      edit = "e",
+      repl = "r",
+      toggle = "t",
+    },
 
-          layouts = {
-           {
-              elements = {
-                'scopes',
-                'breakpoints',
-                'stacks',
-                'watches',
-              },
-              size = 40,
-              position = 'left',
-           },
-           {
-              elements = {
-                'repl',
-                'console',
-              },
-              size = 10,
-              position = 'bottom',
-           }
-          },
-          floating = {
-            max_height = nil, -- These can be integers or a float between 0 and 1.
-            max_width = nil, -- Floats will be treated as percentage of your screen.
-            border = "single", -- Border style. Can be "single", "double" or "rounded"
-            mappings = {
-              close = { "q", "<Esc>" },
-            },
-          },
-          windows = { indent = 1 },
-        })
-        dap.listeners.after.event_initialized["dapui_config"] = function()
-          dapui.open()
-        end
-        dap.listeners.before.event_terminated["dapui_config"] = function()
-          dapui.close()
-        end
-        dap.listeners.before.event_exited["dapui_config"] = function()
-          dapui.close()
-        end
--- dapui.open()
+    layouts = {
+      {
+        elements = {
+          'scopes',
+          'breakpoints',
+          'stacks',
+          'watches',
+        },
+        size = 40,
+        position = 'left',
+      },
+      {
+        elements = {
+          'repl',
+          'console',
+        },
+        size = 10,
+        position = 'bottom',
+      }
+    },
+    floating = {
+      max_height = nil, -- These can be integers or a float between 0 and 1.
+      max_width = nil, -- Floats will be treated as percentage of your screen.
+      border = "single", -- Border style. Can be "single", "double" or "rounded"
+      mappings = {
+        close = { "q", "<Esc>" },
+      },
+    },
+    windows = { indent = 1 },
+  })
+  dap.listeners.after.event_initialized["dapui_config"] = function()
+    dapui.open()
+  end
+  dap.listeners.before.event_terminated["dapui_config"] = function()
+    dapui.close()
+  end
+  dap.listeners.before.event_exited["dapui_config"] = function()
+    dapui.close()
+  end
+  -- dapui.open()
 end
+
 function DAPClose()
-   require("dapui").close()
+  require("dapui").close()
 end
-DAPSetup()
+
+-- DAPSetup()
+
 -- Tricks
 -- Generate list of all config options
 -- lvim --headless +'lua require("lvim.utils").generate_settings()' +qa && sort -o lv-settings.lua{,}
 
+function PT()
+  for k, v in pairs(vim.opt.shadafile) do
+    print(k)
+    print(v)
+  end
+end
