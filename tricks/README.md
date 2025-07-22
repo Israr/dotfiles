@@ -21,3 +21,8 @@ curl http://ipinfo.io/ip
 curl -s http://ipinfo.io/json | jq '.'
 ```
 
+# Jupyter notebook in one
+
+```
+uv run --with jupyter jupyter notebook
+```
